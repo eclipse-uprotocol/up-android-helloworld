@@ -24,8 +24,6 @@
 
 package org.eclipse.uprotocol.uphelloworld.app
 
-import android.content.ComponentName
-import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
 import android.os.HandlerThread
@@ -77,13 +75,6 @@ class MainActivity : AppCompatActivity() {
         val view = binding.root
         setContentView(view)
 
-        /**
-         * Lifecycle of a service should not depend on any client, but this project was created
-         * only for demonstration purposes, so when HelloWorldApp onCreate, start helloWorldService
-         * if it is not started.
-         */
-        startHelloWorldService()
-
         initUPClient()
         addButtonListener()
     }
@@ -92,17 +83,6 @@ class MainActivity : AppCompatActivity() {
         shutdownUPClient()
         mExecutor.shutdownNow()
         super.onDestroy()
-    }
-
-    private fun startHelloWorldService() {
-        val helloWorldServiceIntent = Intent().apply {
-            component = ComponentName(
-                "org.eclipse.uprotocol.uphelloworld.service",
-                "org.eclipse.uprotocol.uphelloworld.service.HelloWorldService"
-            )
-            action = "org.eclipse.uprotocol.uphelloworld.service.HelloWorldService"
-        }
-        startService(helloWorldServiceIntent)
     }
 
     private fun shutdownUPClient() {

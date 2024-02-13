@@ -45,7 +45,6 @@ Once the service is installed, use the following command to launch it:
 ```
 adb shell am start-foreground-service org.eclipse.uprotocol.uphelloworld.service/.HelloWorldService
 ```
-Or launch the HelloWorldApp would also launch the HelloWorldService for demo purposes.
 
 For more details about HelloWorldService, refer to HelloWorldService [README](service/README.md)
 
