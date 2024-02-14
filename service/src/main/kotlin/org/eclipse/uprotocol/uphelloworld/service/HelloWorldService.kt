@@ -197,9 +197,9 @@ class HelloWorldService : LifecycleService() {
      */
     private fun publish(uri: UUri, payload: UPayload) {
         if (!mUPClient.isConnected || !createdTopicSet.contains(uri)) return
-        val message = UMessage.newBuilder().setSource(
-            uri
-        ).setPayload(payload).setAttributes(UAttributesBuilder.publish(UPriority.UPRIORITY_CS0).build()).build()
+        val message = UMessage.newBuilder().setPayload(payload)
+            .setAttributes(UAttributesBuilder.publish(uri,UPriority.UPRIORITY_CS0).build())
+            .build()
         mUPClient.send(message).foldLog("Publish ${stringify(uri)}")
     }
 

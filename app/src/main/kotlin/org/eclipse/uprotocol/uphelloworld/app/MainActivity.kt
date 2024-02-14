@@ -167,8 +167,8 @@ class MainActivity : AppCompatActivity() {
                     Log.e(tag, "Failed to subscribe: $status")
                 } else {
                     Log.i(tag, "Subscribed: $status")
-                    val eventListener = UListener { _, payload, _ ->
-                        UPayloadBuilder.unpack(payload, T::class.java).getOrNull()?.let { message ->
+                    val eventListener = UListener { uMessage ->
+                        UPayloadBuilder.unpack(uMessage.payload, T::class.java).getOrNull()?.let { message ->
                             action(message)
                         }
                     }
