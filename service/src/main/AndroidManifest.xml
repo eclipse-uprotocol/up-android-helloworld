@@ -34,9 +34,6 @@
             <meta-data
                 android:name="uprotocol.entity.version"
                 android:value="1" />
-            <intent-filter>
-                <action android:name="org.eclipse.uprotocol.uphelloworld.service.HelloWorldService" />
-            </intent-filter>
         </service>
     </application>
 
