@@ -63,9 +63,6 @@ android {
         abortOnError false
     }
 }
-kotlin {
-    jvmToolchain(17)
-}
 dependencies {
     implementation lib.androidx_core
     implementation lib.appcompat
