@@ -71,8 +71,8 @@ dependencies {
     implementation lib.lifecycle_service
 
     // UProtocol
-    implementation lib.uprotocol_client
-    implementation lib.uprotocol
+    implementation lib.up_client_java
+    implementation lib.up_java
     implementation lib.google_common_protos
     implementation lib.covesa_uservices
 
