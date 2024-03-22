@@ -22,8 +22,10 @@ ext {
     legacy_support_version = "1.0.0"
     lifecycle_version = "2.7.0"
 
-    uprotocol_client_version = "1.5.0"
-    uprotocol_version = "1.5.8"
+    up_client_android_java_version = "1.5.0"
+    up_client_android_kotlin_version = "1.5.6"
+    up_java_version = "1.5.8"
+    up_kotlin_version = "1.5.6-SNAPSHOT"
     google_common_protos_version = "2.9.6"
 
     junit_version = "4.13.2"
@@ -46,8 +48,10 @@ ext {
             lifecycle_service: "androidx.lifecycle:lifecycle-service:${lifecycle_version}",
 
             // UProtocol
-            uprotocol_client: "org.eclipse.uprotocol:up-client-android-java:${uprotocol_client_version}",
-            uprotocol: "org.eclipse.uprotocol:up-java:${uprotocol_version}",
+            up_client_kotlin: "org.eclipse.uprotocol:up-client-android-kotlin:${up_client_android_kotlin_version}",
+            up_kotlin: "org.eclipse.uprotocol:up-kotlin:${up_kotlin_version}",
+            up_client_java: "org.eclipse.uprotocol:up-client-android-java:${up_client_android_java_version}",
+            up_java: "org.eclipse.uprotocol:up-java:${up_java_version}",
             google_common_protos: "com.google.api.grpc:proto-google-common-protos:${google_common_protos_version}",
 
             //protobuf
