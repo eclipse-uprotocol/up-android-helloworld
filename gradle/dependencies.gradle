@@ -22,8 +22,8 @@ ext {
     legacy_support_version = "1.0.0"
     lifecycle_version = "2.7.0"
 
-    uprotocol_client_version = "1.5.0"
-    uprotocol_version = "1.5.8"
+    uprotocol_client_version = "0.1.2"
+    uprotocol_version = "0.1.9"
     google_common_protos_version = "2.9.6"
 
     junit_version = "4.13.2"

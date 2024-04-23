@@ -46,7 +46,7 @@ import org.eclipse.uprotocol.common.util.UStatusUtils.isOk
 import org.eclipse.uprotocol.common.util.log.Formatter.stringify
 import org.eclipse.uprotocol.core.usubscription.v3.CreateTopicRequest
 import org.eclipse.uprotocol.core.usubscription.v3.USubscription
-import org.eclipse.uprotocol.rpc.URpcListener
+import org.eclipse.uprotocol.transport.UListener
 import org.eclipse.uprotocol.transport.builder.UAttributesBuilder
 import org.eclipse.uprotocol.transport.builder.UPayloadBuilder.packToAny
 import org.eclipse.uprotocol.transport.builder.UPayloadBuilder.unpack
@@ -59,7 +59,6 @@ import org.eclipse.uprotocol.v1.UResource
 import org.eclipse.uprotocol.v1.UStatus
 import org.eclipse.uprotocol.v1.UUri
 import java.util.Calendar
-import java.util.concurrent.CompletableFuture
 import java.util.concurrent.ConcurrentHashMap
 import java.util.concurrent.Executors
 import java.util.concurrent.TimeUnit
@@ -178,7 +177,7 @@ class HelloWorldService : LifecycleService() {
     private fun registerRPCMethods(vararg methods: UUri) {
         mExecutor.execute {
             methods.forEach { method ->
-                mUPClient.registerRpcListener(method, rpcEventListener).foldLog("Register ${stringify(method)}")
+                mUPClient.registerListener(method, rpcEventListener).foldLog("Register ${stringify(method)}")
             }
         }
     }
@@ -187,7 +186,7 @@ class HelloWorldService : LifecycleService() {
     private fun unregisterRPCMethods(vararg methods: UUri) {
         mExecutor.execute {
             methods.forEach { method ->
-                mUPClient.unregisterRpcListener(method, rpcEventListener).foldLog("Unregister ${stringify(method)}")
+                mUPClient.unregisterListener(method, rpcEventListener).foldLog("Unregister ${stringify(method)}")
             }
         }
     }
@@ -198,7 +197,7 @@ class HelloWorldService : LifecycleService() {
     private fun publish(uri: UUri, payload: UPayload) {
         if (!mUPClient.isConnected || !createdTopicSet.contains(uri)) return
         val message = UMessage.newBuilder().setPayload(payload)
-            .setAttributes(UAttributesBuilder.publish(uri,UPriority.UPRIORITY_CS0).build())
+            .setAttributes(UAttributesBuilder.publish(uri, UPriority.UPRIORITY_CS0).build())
             .build()
         mUPClient.send(message).foldLog("Publish ${stringify(uri)}")
     }
@@ -223,10 +222,10 @@ class HelloWorldService : LifecycleService() {
     /**
      * Listener when RPC methods are called by App
      */
-    inner class RPCEventListener : URpcListener {
-        override fun onReceive(message: UMessage, responseFuture: CompletableFuture<UPayload>) {
+    inner class RPCEventListener : UListener {
+        override fun onReceive(message: UMessage) {
             when (message.attributes.sink) {
-                RPC_SAY_HELLO -> processHelloRequest(message, responseFuture)
+                RPC_SAY_HELLO -> processHelloRequest(message)
                 // Add More RPC Calls here if needed
                 else -> {
                     // Do nothing
@@ -238,9 +237,9 @@ class HelloWorldService : LifecycleService() {
          * Handler for the SayHello! RPC method
          */
         private fun processHelloRequest(
-            message: UMessage,
-            completableFuture: CompletableFuture<UPayload>
+            message: UMessage
         ) {
+            Log.i(tag, "processHelloRequest: ${stringify(message)}")
             val request = unpack(message.payload, HelloRequest::class.java).getOrNull()
             val responseMessage =
                 if (request == null) {
@@ -251,7 +250,12 @@ class HelloWorldService : LifecycleService() {
                     "Hello ${request.name}!"
                 }
             val helloResponse = HelloResponse.newBuilder().setMessage(responseMessage).build()
-            completableFuture.complete(packToAny(helloResponse))
+            mUPClient.send(
+                UMessage.newBuilder()
+                    .setPayload(packToAny(helloResponse))
+                    .setAttributes(UAttributesBuilder.response(message.attributes).build())
+                    .build()
+            )
         }
     }
 
