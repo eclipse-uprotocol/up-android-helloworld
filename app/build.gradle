@@ -80,7 +80,9 @@ dependencies {
     implementation lib.uprotocol_client
     implementation lib.uprotocol
     implementation lib.google_common_protos
-    implementation lib.covesa_uservices
+    implementation(lib.covesa_uservices) {
+        exclude group: 'org.eclipse.uprotocol', module: 'uprotocol-core-api'
+    }
 
     // Test dependencies
     testImplementation lib.junit

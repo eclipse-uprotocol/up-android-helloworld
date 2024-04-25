@@ -30,6 +30,7 @@ allprojects {
         mavenCentral()
         google()
         mavenLocal()
+        maven { url 'https://jitpack.io' }
     }
 }
 

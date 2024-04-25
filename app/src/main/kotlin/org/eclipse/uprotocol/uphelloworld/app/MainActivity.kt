@@ -40,14 +40,15 @@ import org.eclipse.uprotocol.core.usubscription.v3.SubscriberInfo
 import org.eclipse.uprotocol.core.usubscription.v3.SubscriptionRequest
 import org.eclipse.uprotocol.core.usubscription.v3.USubscription
 import org.eclipse.uprotocol.core.usubscription.v3.UnsubscribeRequest
-import org.eclipse.uprotocol.rpc.CallOptions
 import org.eclipse.uprotocol.rpc.RpcMapper
 import org.eclipse.uprotocol.transport.UListener
 import org.eclipse.uprotocol.transport.builder.UPayloadBuilder
 import org.eclipse.uprotocol.uphelloworld.app.databinding.ActivityMainBinding
 import org.eclipse.uprotocol.uri.factory.UResourceBuilder
+import org.eclipse.uprotocol.v1.CallOptions
 import org.eclipse.uprotocol.v1.UCode
 import org.eclipse.uprotocol.v1.UEntity
+import org.eclipse.uprotocol.v1.UPriority
 import org.eclipse.uprotocol.v1.UResource
 import org.eclipse.uprotocol.v1.UStatus
 import org.eclipse.uprotocol.v1.UUri
@@ -220,7 +221,7 @@ class MainActivity : AppCompatActivity() {
                 UPayloadBuilder.packToAny(
                     HelloRequest.newBuilder().setName(binding.editTextName.text.toString()).build()
                 ),
-                CallOptions.DEFAULT
+                CALL_OPTION_DEFAULT
             ).let {
                 RpcMapper.mapResponse(it, HelloResponse::class.java).thenAccept { response ->
                     Log.i(tag, "rpc response $response")
@@ -260,5 +261,7 @@ class MainActivity : AppCompatActivity() {
 
         val UURI_SECOND: UUri = UUri.newBuilder().setEntity(HELLO_USER_SERVICE_UENTITY)
             .setResource(UResource.newBuilder().setName("one_second").setMessage("Timer").build()).build()
+
+        private val CALL_OPTION_DEFAULT = CallOptions.newBuilder().setPriority(UPriority.UPRIORITY_CS4).setTtl(10_000).build()
     }
 }
